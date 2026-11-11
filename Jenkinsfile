@@ -47,7 +47,8 @@ pipeline {
                         bat '''
                           if not exist ".venv\\Scripts\\python.exe" "%PYTHON_BIN%" -m venv .venv
                           call .venv\\Scripts\\activate.bat
-                          python -c "import pytest, allure, requests, yaml" 2>nul || python -m pip install -r requirements.txt
+                          rem 已装齐依赖就跳过，否则用清华镜像安装（Jenkins 服务账号可能没有用户级 pip 配置）
+                          python -c "import pytest, allure, requests, yaml" 2>nul || python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
                           python --version
                           pytest --version
                         '''
